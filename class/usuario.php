@@ -31,21 +31,53 @@ class Usuario{
 		}
 
 		public function loadById($id){
+           
+			$sql = new Sql();
+			//$results = $sql->select("SELECT * FROM tb_usuarios WHERE idusuario= :ID", array(":ID"=>$id));
+            $results = $sql->select("SELECT * FROM 	tb_usuarios WHERE idusuario=$id");
+			
+			if (count($results)>0){
+				 $row = $results[0];
+			
+			// setando campos da classe
+			$this->setIdusuario($row['idusuario']);
+			$this->setDeslogin($row['deslogin']);
+			$this->setDessenha($row['dessenha']);
+			$this->setDtcadastro(new DateTime($row['dtcadastro']));
+			}  
+		}
+		public static function getList(){
+           $sql = new Sql();
+           return $sql->select("SELECT * FROM tb_usuarios ORDER BY deslogin");
+		}			
+		public static function search($login){
+           //echo "valor de login:". $login;
+           $login = "%".$login."%";
+           $sql = new Sql;
+           //return $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :SEARCH ORDER BY deslogin",array(':SEARCH'=>"%".$login."%"));
+           return $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE '$login'");
+
+		}
+		public function login($login,$senha){
 
 			$sql = new Sql();
-			$results = $sql->select("SELECT * FROM 	tb_usuarios WHERE idsuauario= :ID", array(":ID"=>$id));
+			//$results = $sql->select("SELECT * FROM 	tb_usuarios WHERE deslogin = :LOGIN AND dessenha = :SENHA",array(":LOGIN"=>$login,":SENHA"=>$senha));
+			$results = $sql->select("SELECT * FROM 	tb_usuarios WHERE deslogin = '$login' AND dessenha = '$senha'");
 
 			if (count($results)>0){
 				$row = $results[0];
-								
-				// setando campos da classe
-				$this->setIdusuario($row['idusuario']);
-				$this->setDeslogin($row['deslogin']);
-				$this->setDessenha($row['dessenha']);
-				$this->setDtcadastro(new DateTime($row['dtcadastro']));
-			}  
+			// setando campos da classe
+			$this->setIdusuario($row['idusuario']);
+			$this->setDeslogin($row['deslogin']);
+			$this->setDessenha($row['dessenha']);
+			$this->setDtcadastro(new DateTime($row['dtcadastro']));
+			}  else{
 
+				throw new Exception("Login ou Senha invalidos");
+				
+			} 
 		}
+		
 
 		public function __toString(){
 
@@ -53,11 +85,8 @@ class Usuario{
 				"idusuario"=>$this->getIdusuario(),
 				"deslogin"=>$this->getDeslogin(),
 				"dessenha"=>$this->getDessenha(),
-		  		"dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:i:s")
-
-		  	//	 return json_encode(array(
-			//	"idusuario"=>"teste teste teste"));
-		  	));
+		  		"dtcadastro"=>$this->getDtcadastro()
+    		   	));
 
 		}
 }
