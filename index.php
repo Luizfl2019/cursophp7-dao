@@ -21,7 +21,22 @@
 //echo json_encode($search);
 
 // sessão 13 aula 64 // consulta e autenricando login e senha
- $usuario = new Usuario();
- $usuario->login("joana","1234");
- echo $usuario;
+// $usuario = new Usuario();
+// $usuario->login("joana","1234");
+ //echo $usuario;
+
+
+// sessão 13 aula 65
+// chamando funcion insert direto
+//$aluno = new Usuario();
+//$aluno->setDeslogin("maria da silva");
+//$aluno->setDessenha("987654321");
+//$aluno->insert();
+//echo $aluno;
+
+// chamando pelo constrct
+$aluno = new Usuario("Nazareth","94325");
+$aluno->insert();
+echo $aluno;
+
 ?>
