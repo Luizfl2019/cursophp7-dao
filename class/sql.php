@@ -26,6 +26,7 @@ class Sql extends PDO {  // classe extendida do PDO
 
         public function select($rawQuery, $params = array()):array
 		{
+		   echo "query=".$rawQuery." ".$params;
 		   $stmt = $this->query($rawQuery, $params);
            return $stmt->fetchAll(PDO::FETCH_ASSOC);
 			
